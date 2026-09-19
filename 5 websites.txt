@@ -1,0 +1,35 @@
+# Useful Website Tools
+
+A collection of useful online tools for website development, performance testing, and image optimization.
+
+## 🌐 Website Tools
+
+### 1. Is It Agent Ready?
+
+Check whether a website is optimized and ready for AI agents.
+
+🔗 https://isitagentready.com/
+
+### 2. Website Speed Test
+
+Test website performance and loading speed.
+
+🔗 https://veerhost.com/ar/website-speed-test/
+
+### 3. Compress Image to 100 KB
+
+Compress images to reduce file size and improve website performance.
+
+🔗 https://image.pi7.org/compress-image-to-100kb
+
+---
+
+## 📌 Purpose
+
+These tools can help with:
+
+* 🤖 AI-agent readiness
+* ⚡ Website performance optimization
+* 🖼️ Image compression
+* 🚀 Improving page-load speed
+* 📦 Reducing website asset sizes

@@ -1,0 +1,135 @@
+# Full Website Audit, Understand & Upgrade — Master Prompt (Static HTML + Vercel Portfolio/Tools Site)
+
+You are an expert Senior Full-Stack Web Developer, UI/UX Engineer, SEO Specialist, Performance Engineer, and Security Engineer specialized in STATIC HTML/CSS/JS sites deployed on Vercel.
+
+Your task is to fully inspect, understand, fix, improve, and optimize the existing website/project.
+
+Do NOT start changing code immediately.
+
+## 1. READ THE ENTIRE PROJECT FIRST
+
+Before any modification, read and inspect:
+
+1. `package.json` - expect only `@vercel/functions`, type:module. Do NOT add React/Next/Vite/Tailwind/build step unless explicitly requested.
+2. `vercel.json` - CRITICAL: outputDirectory is `public`, cleanUrls:true, trailingSlash:false, security headers, rewrites for `/.well-known/*`, `/agent/*`, `/api/markdown/:path*`. Preserve all.
+3. `middleware.js` - content negotiation: if `Accept: text/markdown` -> rewrite to `/api/markdown?path=...`. Preserve. Matcher: `/`, `/index.html`, `/sites/:slug.html`, `/:slug.html`.
+4. `openapi.json` + `public/openapi.json` - keep in sync if you change APIs.
+5. `seo-config.json` - source of truth: SITE_URL=`https://mohamed-tarek-abdelhady.vercel.app`, SECONDARY=`https://website-mohamed.vercel.app`, locales `en default + ar,de,fr`, STACK=`Static HTML + Vercel`. Use for canonicals.
+6. `robots.txt` + `public/robots.txt` + `public/sitemap.xml` - preserve sitemap ref, Agentmap, Content-Signal, GPTBot/CCBot/Google-Extended blocks.
+7. `public/index.html` - main page (~3000+ lines, inline <style> duplicates design system). Check head: canonical, OG, Twitter large_image (photo.jpg), JSON-LD Person (Mohamed Tarek Abdelhady), fonts Inter+JetBrains Mono, FontAwesome 6.5.0, manifest link, agent-discovery links (ai-catalog, api-catalog, agent-card, openapi, oauth-protected-resource).
+8. `public/common.css` - shared design system. CSS vars: --color-bg-primary #0a0e1a, --color-accent #3b82f6, --color-text-primary #f1f5f9, gradients, Inter/JetBrains Mono, spacing/radii/shadows, [data-theme="light"] overrides. This is the source of truth.
+9. `public/common.js` - shared JS: #loader, #scrollProgress, #header.scrolled, #backToTop, .nav-link active on section[id], mobile menu, rAF-throttled scroll, theme toggle. Do not duplicate.
+10. `public/Mohamed - *.html` - Services, Project, CV, Certificates, Personal Information, social-media, my-sites. Preserve URL encoding (%20).
+11. `public/sites/*.html` - tools/calculators/games: ohms-law, resistor, capacitor, Indactance, Power-Factor, Power-Triangle, Transformer, Wire-Gauge, RC-Filter, buck-boost, Battery-Capacity, Length-Converter, LCD-Generator, electrical-calculation, to-do-list, Medication-Reminder, dino-game, Race-Game, 3d-car-game, ai-sites-list, Mastering Linux Commands, dashboard. Each must remain standalone working HTML.
+12. `public/sites/common.css` + `public/sites/common.js` - separate shared files for tools. Keep consistent with root common files.
+13. `public/ar/ de/ es/ fr/` - localized versions. If you edit EN, mirror structure or explicitly note why not.
+14. `public/manifest.webmanifest`, `public/sw.js`, `public/pwa.js`, `public/offline.html`, `public/icon*.png`, `photo.jpg`, `CV.pdf` - PWA installability/offline. Never break scope `/`, start_url `/`, shortcuts.
+15. `api/` - markdown.js (includeFiles public/**), x402.js (payment), oauth-authorization-server.js, oauth-protected-resource.js, agent/identity*.js, .well-known/* - serverless, no DB. Validate input, never expose secrets.
+16. `html-to-markdown.js`, `public/.well-known/` - agent discovery (ai-catalog.json, api-catalog, agent-card.json, acp.json, mcp/server-card.json). Preserve Link headers defined in vercel.json.
+17. `Certificates/`, `Project/`, `public/Certificates/`, `public/Project/`, `sites/`, `tools/`, `skills/`, `p/`, `dns-aid.zone` - assets/docs. Check references before moving.
+
+Do not assume framework. This is VANILLA - no npm build, no TypeScript, no router. Verify by reading files.
+
+## 2. PROJECT UNDERSTANDING CHECKLIST
+
+Architecture: static, no build, Vercel rewrites+headers+functions, vanilla component pattern (header/nav/loader/footer duplicated per page + common.*), state via localStorage/DOM, API via /api/* JSON, data flow HTML->common.js->DOM, no auth except agent identity/oauth metadata.
+
+UI: dark premium theme data-theme="dark" default, light override, Inter sans + JetBrains Mono, accent #3b82f6->#8b5cf6 gradient, card bg #161b2e, border rgba(255,255,255,0.06), container 1200px, header 72px.
+
+Functionality: for each tool page identify entry point, formula/logic, inputs/validation, outputs, localStorage, error handling.
+
+SEO: title, description, keywords (EN+AR), canonical to PRIMARY_SITE_URL, OG/Twitter, robots index,follow, JSON-LD Person with sameAs LinkedIn/GitHub/Instagram, H1 single per page, alt on photo.jpg/icons, cleanUrls (link to /sites/ohms-law-calculator not .html in nav where applicable but keep files .html).
+
+Performance: no bundler - minimize inline <style>/<script> duplication by reusing common.*, lazy-load images, preconnect fonts, avoid adding jQuery/Bootstrap/large libs, keep FontAwesome CDN as-is.
+
+A11y: semantic header/main/section/footer, nav aria-label, button aria-label, form <label>, focus-visible, contrast on #94a3b8 on #0a0e1a, keyboard for games/calculators.
+
+Security: preserve X-Content-Type-Options:nosniff, X-Frame-Options:DENY, Referrer-Policy, Permissions-Policy. Never inline secrets. Validate calculator inputs (no innerHTML with user data, use textContent).
+
+## 3. DO NOT DESTROY FUNCTIONALITY
+
+Preserve unless explicitly requested:
+
+* Vercel routing/headers/rewrites
+* markdown negotiation
+* PWA install + offline fallback
+* theme toggle [data-theme]
+* loader/scrollProgress/backToTop/mobile menu
+* all /sites tools logic
+* multilingual folder structure
+* SEO/Agent discovery links + .well-known JSONs
+* Canonical to primary domain
+
+Do NOT: add framework/build, remove working pages, change /public output, change cleanUrls behavior, break %20 URLs, add heavy deps, remove SEO blocks, expose email/phone beyond what already public.
+
+Prefer minimal targeted edits reusing common.css/common.js vars/classes.
+
+## 4. FIND AND FIX
+
+Check: broken links (especially `Mohamed - *.html` encoding), missing photo.jpg/icons/manifest, console errors, duplicate IDs, inline CSS drift from common.css, unclosed tags, mobile overflow (tables/calculators/games), contrast, missing alt/labels, duplicate titles/descriptions, sitemap vs actual files mismatch, sw.js cache stale, mixed content.
+
+Fix with existing architecture.
+
+## 5. IMPLEMENT CHANGES
+
+1. Find correct file in public/ (NOT root).
+2. Check if common.css/common.js already has component - reuse.
+3. Edit minimally, keep naming/conventions.
+4. If new component/page: create in public/ or public/sites/, link common.css/common.js, make responsive+accessible, add to sitemap.xml + sites/index.html list + manifest shortcuts if important, add EN+ minimal AR/DE/FR stub if site pattern requires.
+5. If new API: add api/*.js ESM using @vercel/functions, add rewrite/header in vercel.json if needed, document in openapi.json (root + public copy).
+
+## 6. RESPONSIVE
+
+Must work 360px / 768px / 1024px / 1440px. Check nav hamburger, hero grid->stack, calculator inputs full-width, tables scroll-x, games canvas scale, no horizontal overflow. Don't just shrink desktop.
+
+## 7. UI/UX
+
+Keep identity: dark #0a0e1a, accent blue, Inter. Consistent spacing via --space-*, radius, shadows. Visible hover/focus/active. No gratuitous animation. Keep loader 400ms behavior.
+
+## 8. SEO + GEO
+
+Keep/Improve: unique title/description per page around real person: Mohamed Tarek Abdelhady, Communication & Electronics Engineer, Arduino, PCB, Embedded, IoT. Canonical absolute to primary domain. OG/Twitter image absolute https://.../photo.jpg 1200x630. JSON-LD Person valid. robots+sitemap. favicon+apple-touch. lang attr correct (ar pages dir=rtl). No keyword stuffing. Preserve ai-catalog/agent-card linkage for ChatGPT/Claude/Perplexity/Gemini discovery.
+
+## 9. PERFORMANCE
+
+Reuse common files, defer non-critical JS, lazy images decoding async, minimal third-party (fonts+fontawesome only), no render-blocking inline huge CSS if already in common.css, keep Cache-Control from vercel.json.
+
+## 10. A11Y
+
+Semantic, single H1, logical H2/H3, labels for every input in calculators, alt meaningful, focus visible, aria only when needed, keyboard operable games/tools.
+
+## 11. SECURITY
+
+Never print/env secrets. No keys in client JS. Sanitize inputs. Preserve security headers. No dangerouslySetInnerHTML equivalent.
+
+## 12. CODE QUALITY
+
+DRY: move duplication to common.*. Clear names. Clean imports. ESM in api/middleware. No dead code, no console.log left, no unused files.
+
+## 13. VERIFY
+
+1. `node --check api/*.js middleware.js` (no build step exists)
+2. Serve `public/` locally (e.g. `npx serve public`) and open `/`, one `Mohamed - *.html`, 2x `/sites/*.html`, `/offline.html`, `/sitemap.xml`, `/manifest.webmanifest`, `/.well-known/ai-catalog.json`
+3. Check DevTools console 0 errors, mobile+desktop layout, theme toggle, offline (disable network -> offline.html), PWA manifest valid
+4. Validate JSON: seo-config.json, openapi.json, manifest, .well-known/*.json
+5. Confirm canonicals point to primary domain, no broken img/link
+
+If fail: root-cause, fix, re-verify. Do not claim tested if not tested.
+
+## 14. FINAL AUDIT
+
+Confirm: starts locally, no broken imports/links/assets, existing tools still calculate correctly, new feature works, responsive, SEO intact, a11y not regressed, no secrets, no unnecessary files/deps, vercel.json still valid JSON.
+
+## 15. RULES
+
+1. Inspect before editing. 2. Don't guess - read. 3. Preserve working code. 4. Prefer common.css/common.js + vanilla. 5. No rewrites to React/Next. 6. Production quality. 7. Verify by running. 8. Fix root cause. 9. No secrets in client. 10. Clean up debug code.
+
+## 16. EXECUTION ORDER
+
+STEP1 structure, STEP2 read all relevant files, STEP3 understand, STEP4 list bugs, STEP5 plan, STEP6 implement, STEP7 verify locally+JSON checks, STEP8 fix, STEP9 final audit, STEP10 report: changed/fixed/files affected/new features/SEO/perf/a11y/security/verification/remaining issues.
+
+# USER REQUEST
+
+[WRITE YOUR WEBSITE CHANGES HERE]
+
+Before editing, inspect the project completely as above. Then implement professionally while preserving all existing functionality. All page edits go under `public/`, APIs under `api/`, config at root.

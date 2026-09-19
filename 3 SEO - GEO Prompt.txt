@@ -1,0 +1,317 @@
+Prompt: SEO + Generative Engine Optimization (GEO)
+
+Copy everything below the line into Cursor / Claude / ChatGPT (Agent mode with repo access). Edit the Variables block first.
+
+Vocabulary (read this once):
+
+SEO = classic search (Google/Bing blue links, rankings, CTR).
+
+GEO = Generative Engine Optimization — getting your brand cited inside answers from ChatGPT, Claude, Perplexity, Gemini, Copilot, and Google AI Overviews. Not “geo-redirect by country.”
+
+═══════════════════════════════════════════════════════════════════
+VARIABLES — edit these before running
+═══════════════════════════════════════════════════════════════════
+
+PRODUCT_NAME:            YourProduct
+SITE_URL:                https://www.example.com
+ONE_LINER:               One sentence: what you are, who for, primary outcome (reuse everywhere)
+CATEGORY_TERMS:          e.g. "AI sales agent", "comment to DM", "WhatsApp chatbot"
+COMPETITOR_COMPARE:      e.g. ManyChat (or "none")
+FOUNDER_OR_AUTHOR:       Full name used on About / bylines
+STACK:                   Next.js App Router
+HOSTING:                 Vercel
+BILLING_PROVIDER:        Polar / Stripe / none
+PERSIST_LOCALE_IN_DB:    no
+ANALYTICS:               PostHog (or equivalent)
+LEGAL_POLICY:            English-governs until lawyer-reviewed native translations
+DO_NOT_CLAIM:            fake certifications, unaudited GDPR/SOC, Meta Tech Provider, etc.
+AVOID_VENDOR_NAMES:      never put internal vendor brands in titles, metas, H1s
+GEO_TARGET_ENGINES:      ChatGPT, Claude, Perplexity, Gemini, Copilot, Google AI Overviews
+GEO_WEEKLY_PROMPTS:      5–10 buyer questions you want to be named for (write them in Variables notes)
+THIRD_PARTY_PROFILES:    LinkedIn company+founder, X, YouTube, Product Hunt, G2/Capterra, Crunchbase
+CITATION_LEDGER:         spreadsheet or Notion table (engine × prompt × cited? × URL cited × date)
+
+═══════════════════════════════════════════════════════════════════
+GOAL
+═══════════════════════════════════════════════════════════════════
+
+Ship two complementary systems for PRODUCT_NAME:
+
+A) SEO — one language per URL, crawler-safe.
+
+B) GENERATIVE ENGINE OPTIMIZATION (GEO) — structure content + entity authority so
+AI answer engines CITE PRODUCT_NAME (by name, ideally with a link) when buyers ask
+CATEGORY_TERMS / COMPETITOR_COMPARE questions in GEO_TARGET_ENGINES.
+
+SEO earns a blue link someone might click.
+GEO earns a sentence inside the answer the person actually reads.
+
+Do both. Do not confuse country-IP redirects with GEO.
+
+═══════════════════════════════════════════════════════════════════
+PART A — SEO
+═══════════════════════════════════════════════════════════════════
+
+Outcomes
+
+1. One language per URL
+2. Localized public slugs for money pages
+3. Canonical = absolute URL of THAT page
+4. One job per page (avoid cannibalization): home = category+CTA; feature = mechanism;
+   integration = platform+setup; compare = commercial; guides = informational.
+5. LEGAL_POLICY + DO_NOT_CLAIM + AVOID_VENDOR_NAMES on all public SEO surfaces.
+
+SEO implementation order
+0. Inventory routes, existing i18n, sitemap, metadata.
+
+1. Message namespaces (marketing, app, auth, emails, errors) + parity tests.
+2. buildPageMetadata with canonical;
+   JSON-LD Organization / WebSite / SoftwareApplication / FAQPage / BreadcrumbList /
+   Article as relevant.
+3. Billing/analytics: no PII in events.
+4. Market-native H1/title/FAQ/compare angles for PRIMARY_MARKETS.
+5. Verify: build; canonical; document slug map.
+
+═══════════════════════════════════════════════════════════════════
+PART B — GENERATIVE ENGINE OPTIMIZATION (GEO)
+═══════════════════════════════════════════════════════════════════
+
+Definition (use this wording in docs you create)
+Generative Engine Optimization (GEO) is structuring your content and off-site
+authority so AI answer engines cite PRODUCT_NAME inside the answers they generate.
+Where SEO optimizes for ranked links, GEO optimizes for cited passages.
+
+Why this is different from SEO
+
+| Dimension   | SEO                        | GEO                                       |
+| ----------- | -------------------------- | ----------------------------------------- |
+| Goal        | Rank in a list             | Be named / cited in the answer            |
+| Unit        | Page                       | Extractable passage (often ~40–100 words) |
+| Visibility  | Positions 1–10             | Named or invisible                        |
+| Discovery   | Crawl + rank               | Training data + live RAG retrieval        |
+| Measurement | Rankings, organic sessions | Citation rate, share of voice per prompt  |
+
+Two citation pathways (optimize both)
+
+1. Training data — presence in the open web before model cutoffs (slow, compounding).
+2. Real-time RAG — ChatGPT Search, Perplexity, AI Overviews, Claude with fetch
+   (this is what your site changes can influence immediately).
+
+Citation Trinity (every page must pass all three)
+
+1. Identity — engines must disambiguate PRODUCT_NAME as one entity.
+2. Extractability — a self-contained answer block matches the buyer question.
+3. Corroboration — independent third parties say compatible things about you.
+
+───────────────────────────────────────────────────────────────────
+B1. Entity identity (site + knowledge graph)
+───────────────────────────────────────────────────────────────────
+
+* Freeze ONE_LINER. Same sentence on homepage, About, schema description,
+  LinkedIn, YouTube, Product Hunt, G2, Crunchbase, founder bios, press kits.
+* Organization JSON-LD with name, url, logo, description, email, sameAs[]
+  pointing only at real official profiles (THIRD_PARTY_PROFILES). Never invent URLs.
+* SoftwareApplication (or Product) schema for SaaS: category, offers, provider.
+* Person schema / clear founder byline (FOUNDER_OR_AUTHOR) on guides and About.
+* Consistent spelling of PRODUCT_NAME everywhere (no alternate brand spellings).
+* About page with concrete facts: what you are, who for, founding story, contact.
+* Prefer server-rendered HTML for hero + answer blocks (AI crawlers are weak at JS).
+
+───────────────────────────────────────────────────────────────────
+B2. Technical crawl access for AI engines
+───────────────────────────────────────────────────────────────────
+
+* Allow AI crawlers in robots.txt unless you have a deliberate block policy.
+  At minimum do not accidentally disallow: GPTBot, OAI-SearchBot, ChatGPT-User,
+  ClaudeBot, anthropic-ai, PerplexityBot, Google-Extended, Applebot, Bingbot.
+* Submit sitemap to Google Search Console AND Bing Webmaster Tools
+  (ChatGPT Search leans on Bing; AI Overviews/Gemini lean on Google).
+* Optional IndexNow if you publish often.
+* Clean canonicals; HTTPS; fast LCP; no paywall on pages you want cited.
+* Visible last-updated / dateModified on money + guide pages; keep schema dates honest.
+* Serve /llms.txt at SITE_URL/llms.txt following https://llmstxt.org :
+  H1 = product name; blockquote = ONE_LINER + key facts; H2 sections with
+  curated markdown links to authoritative pages (pricing, features, compare,
+  guides, security). Auto-generate from your content registry so it never drifts
+  from the sitemap. llms.txt is a map for agents — NOT a substitute for
+  robots.txt, sitemap, schema, or real content.
+* Optional advanced: markdown mirrors of key docs pages (page.md / Link rel=alternate
+  type=text/markdown) when your stack supports it — especially for docs-heavy products.
+
+───────────────────────────────────────────────────────────────────
+B3. Page-level extractability (write for citation, not fluff)
+───────────────────────────────────────────────────────────────────
+GEO section formula (use under every important H2/H3):
+
+1. Heading = the buyer question (or clear topic that matches conversational queries)
+2. First 40–60 words = direct answer (no “in this section we will explore…”)
+3. Next sentence = strongest supporting fact, number, or named source
+4. Body = specifics, examples, edge cases
+5. Optional closing implication or CTA (do not bury the answer under the CTA)
+
+Mandatory content patterns
+
+* TL;DR / answer box near the top of guides and commercial pages (40–60 words).
+* FAQ sections with exact Q&A visible in HTML (not only accordion empty of text);
+  FAQPage JSON-LD matching visible questions (3–7 top questions per page).
+* Comparison pages with tables + “Best for” / “Not best for” (AI engines extract tables).
+* Concrete capabilities and limits (pricing floors, channels, trial length, what you
+  do NOT do). Vague hype is rarely cited.
+* Statistics and original numbers when true (your product data, honest benchmarks).
+  Prefer “Pro is $29/mo with a 7-day trial” over “affordable pricing.”
+* One claim per short paragraph; self-contained 60–100 word blocks.
+* Question-form H2s that mirror how people ask ChatGPT/Claude
+  (“What is a ManyChat alternative for coaches?” not “Overview”).
+* Outbound links to authoritative non-self sources where you cite industry facts
+  (models distrust closed loops of self-promotion).
+
+Page types that win GEO (prioritize in this order)
+
+1. Compare / alternative pages (vs COMPETITOR_COMPARE)
+2. Category-defining pages (what PRODUCT_NAME is + ONE_LINER)
+3. How-to / guides with answer-first intros
+4. Pricing with concrete plan facts
+5. Integration / use-case pages with setup FAQs
+6. Security / trust pages with honest compliance status (no fake certs)
+
+Anti-patterns (do not ship)
+
+* Story-led intros with zero facts
+* Keyword stuffing
+* Claiming certifications you do not have (hurts trust + citation)
+* Hiding answers behind client-only JS
+* Duplicate near-identical pages fighting each other (cannibalization)
+* Buying fake reviews or spam “citation” links
+
+───────────────────────────────────────────────────────────────────
+B4. Off-site corroboration (engines trust the network)
+───────────────────────────────────────────────────────────────────
+Owned pages alone are not enough. Build a corroboration network:
+
+| Surface                | Why engines care                           | What to do                                       |
+| ---------------------- | ------------------------------------------ | ------------------------------------------------ |
+| LinkedIn co + founder  | Identity + co-citation                     | About = ONE_LINER; weekly posts with demos       |
+| YouTube                | How-to / comparison citations              | 3+ walkthroughs; full transcripts in description |
+| G2 / Capterra          | B2B compare queries                        | Complete profile; honest reviews; respond        |
+| Crunchbase             | Entity disambiguation                      | Complete company record; add to sameAs when live |
+| Product Hunt           | Launch + category tags                     | Clear category; ONE_LINER                        |
+| Reddit / IndieHackers  | Perplexity + ChatGPT category queries      | Value-first answers; link only when relevant     |
+| Guest posts / podcasts | Third-party co-mention with CATEGORY_TERMS | Earn coverage; do not spam                       |
+| X / Twitter            | Helps Grok + social corroboration          | Bio + pinned demo; real conversation             |
+| Wikipedia              | Heavy ChatGPT source weight                | Earn via independent coverage; never vanity-edit |
+
+Target: 15–25 meaningful third-party mentions per quarter (quality > volume).
+When third parties describe you, they should paraphrase ONE_LINER + CATEGORY_TERMS
+so entity↔topic association strengthens.
+
+───────────────────────────────────────────────────────────────────
+B5. Engine-specific deltas (same trinity, different retrieval)
+───────────────────────────────────────────────────────────────────
+
+* ChatGPT Search: Bing index matters → Bing Webmaster + strong schema + clear entities.
+* Google AI Overviews / Gemini: classic Google SEO + FAQ/HowTo-friendly structure;
+  top organic relevance still helps.
+* Perplexity: aggressive live crawl + heavy citations; favor fresh dateModified,
+  clean HTML, allow PerplexityBot; Reddit/community corroboration helps.
+* Claude: quality/depth + ClaudeBot access; quoteable passages; llms.txt helps agents.
+* Copilot: Bing-oriented; similar to ChatGPT Search hygiene.
+* Grok: web + X presence; real posts matter more than corporate boilerplate.
+
+Do not build six separate sites. Build one extractable site + engine-aware distribution.
+
+───────────────────────────────────────────────────────────────────
+B6. Measurement (citation ledger — non-negotiable)
+───────────────────────────────────────────────────────────────────
+AI answers are non-deterministic. One screenshot is noise. Run a ledger:
+
+For each prompt in GEO_WEEKLY_PROMPTS, weekly, across GEO_TARGET_ENGINES, log:
+
+* date
+* engine + mode (e.g. ChatGPT with search on/off)
+* prompt text (exact)
+* brand mentioned? (yes/no)
+* linked? (yes/no)
+* which URL/passage was cited (if any)
+* competitors named
+* notes / screenshot link
+
+Track two rates over a rolling window (e.g. 4 weeks):
+
+* Present-rate: % of runs where an AI Overview / answer container appears (if applicable)
+* Cited-rate: % of runs where PRODUCT_NAME is named when an answer appears
+
+Act on gaps: if a prompt is consistently uncited, improve the matching page’s
+answer block, FAQ, compare table, or earn a corroborating mention — then retest.
+
+Also wire product analytics (ANALYTICS) for AI-referred traffic when UTM/referrers
+exist (chatgpt.com, perplexity.ai, etc.) — separate from classic organic.
+
+───────────────────────────────────────────────────────────────────
+B7. Freshness cadence
+───────────────────────────────────────────────────────────────────
+
+* Compare + pricing: review monthly (facts, prices, “best for”)
+* Guides: quarterly refresh + bump visible updated date when material
+* llms.txt: regenerate from registry on each request or on content publish
+* After each new money page: confirm sitemap + llms.txt + GSC/Bing URL inspection
+
+  * share founder post + re-run 2–3 related GEO prompts
+
+═══════════════════════════════════════════════════════════════════
+IMPLEMENTATION ORDER (single agent run)
+═══════════════════════════════════════════════════════════════════
+
+Phase 0 — Align vocabulary + variables
+Confirm PRODUCT_NAME, ONE_LINER, CATEGORY_TERMS, GEO_WEEKLY_PROMPTS.
+Create docs/seo/GEO.md (this playbook condensed for the repo).
+
+Phase 1 — SEO foundation
+Ship routing, sitemap, canonical.
+
+Phase 2 — GEO technical substrate (Part B1–B2)
+ONE_LINER in site constants; Organization/WebSite/SoftwareApplication JSON-LD;
+FAQPage on FAQ UIs; robots allows AI bots; Bing+Google sitemap; /llms.txt.
+
+Phase 3 — GEO content rewrite (Part B3)
+Rewrite top commercial pages with answer-first H2s, TL;DR, tables, Best for /
+Not best for, concrete facts.
+
+Phase 4 — Corroboration checklist (Part B4)
+Output a founder checklist for THIRD_PARTY_PROFILES + sameAs updates.
+Do not fake profiles. Leave sameAs empty until URLs are real.
+
+Phase 5 — Citation ledger (Part B6)
+Create CITATION_LEDGER template + seed GEO_WEEKLY_PROMPTS from CATEGORY_TERMS
+and COMPETITOR_COMPARE. Document how to retest after content changes.
+
+Phase 6 — Verify
+
+* npm run build (or equivalent)
+* View-source: schema, canonical, answer text in raw HTML
+* curl SITE_URL/llms.txt and /robots.txt /sitemap.xml
+* Spot-check 3 GEO prompts manually; record baseline in the ledger
+* No DO_NOT_CLAIM violations
+
+═══════════════════════════════════════════════════════════════════
+DELIVERABLES
+═══════════════════════════════════════════════════════════════════
+
+1. Working SEO site
+2. GEO substrate: entity one-liner, schema, AI-bot-friendly robots, llms.txt,
+   answer-first commercial pages, compare tables, FAQ JSON-LD
+3. docs/seo/GEO.md — Citation Trinity, page formula, engine notes, weekly prompts,
+   ledger instructions
+4. Founder off-site checklist (profiles + sameAs)
+5. Summary: files changed + how to add a GEO page later
+
+═══════════════════════════════════════════════════════════════════
+CONSTRAINTS
+═══════════════════════════════════════════════════════════════════
+
+* Production-ready, secure, server-authoritative.
+* No dual/legacy routing paths — migrate and delete old trees in the same change set.
+* Prefer one metadata helper, one pathname helper, one llms.txt generator — no page copies.
+* Never ship thin translated doorways for GEO/SEO.
+* Never invent certifications, fake reviews, or fake sameAs profiles.
+* Ask clarifying questions only if a Variable cannot work on this repo;
+  otherwise implement with sensible defaults from the Variables block.

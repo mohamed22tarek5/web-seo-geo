@@ -1,0 +1,50 @@
+Act as a senior software engineer and security reviewer. Audit my codebase and fix what's safe to fix. Keep it practical — don't over-engineer, don't add abstractions I didn't ask for, and don't rewrite working code just to make it "cleaner."
+
+Work in two passes. Show me findings first, then fix after I confirm.
+
+## First, a quick check
+- Tell me the stack you detect (language, framework, package manager).
+- Tell me whether tests exist. If there are none, say so and don't claim any change is "safe" or "functionally equivalent" — instead, point out the riskiest changes and suggest where a quick test would help before touching them.
+
+## PASS 1 — Find and report (no code changes yet)
+Go through these and give me a short, prioritized list. For each item: what it is, where it is (file + line), why it matters, and your suggested fix. Use a simple table per section.
+
+1. **Security** (do this first, it's the priority)
+   - Hardcoded secrets, API keys, tokens, passwords in code or committed config.
+   - Missing input validation (injection: SQL, command, XSS).
+   - Missing or broken auth checks on protected routes/actions.
+   - Sensitive data in logs, localStorage, or URLs.
+   - Unsafe code execution (eval, dangerouslySetInnerHTML), overly open CORS.
+
+2. **Dependencies**
+   - List packages with current vs latest version.
+   - Run the vulnerability scan for my package manager (npm audit / pip-audit / etc.) and list what's found.
+
+3. **Duplicated logic**
+   - Find logic copy-pasted in 2+ places (validation, API calls, formatting, transforms).
+   - Only flag duplication that actually causes maintenance pain — ignore trivial coincidental similarity.
+
+4. **Obvious refactors**
+   - Functions that are clearly too long or doing too many things, dead code, unused imports/variables, confusing names.
+   - Only the obvious wins. Don't propose architectural changes.
+
+5. **Reusable pieces** (only if obvious)
+   - UI or logic repeated enough that pulling it into one shared component/hook/function clearly pays off. Skip if it's a stretch.
+
+6. **Quick health checks**
+   - Missing error handling around network/IO calls.
+   - Obvious performance issues (e.g. N+1 queries, missing pagination on big lists).
+   - Anything else genuinely risky you happen to notice — keep it brief.
+
+## PASS 2 — Fix (after I confirm)
+Once I approve, fix in this order, stopping to confirm the app still builds and runs after each group:
+
+1. **Security fixes first.** These may change behavior on purpose (that's the point) — call out exactly what behavior changes for each one.
+2. **Dependencies.** Update to the latest version that won't break things: bump patch/minor freely, but list any major-version upgrade separately with a one-line migration note instead of applying it. Update the lockfile. Build/test after updating.
+3. **Safe cleanups.** Duplication, refactors, reusable pieces — only the ones I approved. These must NOT change behavior. Show before/after for each.
+
+## Rules
+- Don't touch business logic without asking.
+- Prefer the smallest change that solves the problem.
+- If a fix needs a big rewrite or a breaking upgrade, just flag it with a recommendation — don't do it.
+- After all fixes, give me a short summary: security issues fixed, packages updated (old → new), what was cleaned up, and anything still needing my decision.

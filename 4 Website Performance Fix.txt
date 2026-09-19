@@ -1,0 +1,51 @@
+Analyze my entire website codebase and fix the performance issues reported by Google PageSpeed Insights / Lighthouse.
+
+Focus specifically on:
+
+1. Initial Server Response Time
+
+* Verify the response time of the root document.
+* Avoid unnecessary server-side processing.
+* Remove unnecessary API calls or server operations required before rendering the main page.
+* Optimize server-side code where applicable.
+* Do not add unnecessary caching systems if the current server response is already fast.
+* Preserve the current functionality.
+
+2. Avoid Multiple Page Redirects
+
+* Inspect all redirects, rewrites, middleware rules, routing configuration, canonical URLs, and domain configuration.
+* Identify any redirect chains.
+* Ensure each public URL reaches its final destination with the minimum possible number of redirects.
+* Avoid unnecessary HTTP → HTTPS → www → non-www → path redirect chains.
+* Ensure the canonical URL points directly to the final URL.
+* Make internal links point directly to the final URLs instead of redirected URLs.
+* Check Vercel configuration, next.config.js, middleware, vercel.json, and routing files if they exist.
+* Do not introduce redirect loops.
+* Preserve SEO behavior and canonical URLs.
+
+3. Performance Validation
+
+* Inspect the complete project before making changes.
+* Identify the actual cause of every Lighthouse warning instead of applying generic optimizations.
+* Do not make changes that reduce functionality, accessibility, SEO, or maintainability.
+* Avoid unnecessary dependencies.
+* Check for duplicated requests, unnecessary API calls, blocking resources, and inefficient routing.
+
+4. Important
+
+* Read all relevant project files first.
+* Do not assume the framework or architecture. Detect it from the project.
+* Make only changes that are technically justified.
+* Keep the existing UI and design unchanged.
+* After modifying the code, verify that the application builds successfully.
+* Verify that all routes still work.
+* Verify that assets, CSS, JavaScript, images, fonts, and API requests still load correctly.
+* Provide a concise summary of:
+
+  * Problems found
+  * Files changed
+  * Changes made
+  * Performance impact
+  * Any remaining Lighthouse warnings
+
+The goal is to achieve the best possible Lighthouse performance without breaking the website or changing its visual design.

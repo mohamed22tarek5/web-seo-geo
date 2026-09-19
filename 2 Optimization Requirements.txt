@@ -1,0 +1,32 @@
+###5. ADVANCED OPTIMIZATION
+
+✅ Optimize animations for 60fps and minimal main-thread work
+✅ Use `requestAnimationFrame` for scroll-linked animation updates
+✅ Use passive scroll listeners where applicable
+✅ Use `transform` and `opacity` only for animated properties
+✅ Use `translate3d()` / GPU-accelerated transforms
+✅ Avoid layout-triggering properties such as `top`, `left`, `width`, `height`, and `margin` during animation
+✅ Respect `prefers-reduced-motion` and provide a static fallback
+✅ Pause or disable animations when the Hero section is outside the viewport
+✅ Use `IntersectionObserver` instead of continuous viewport calculations
+✅ Avoid unnecessary DOM reads/writes during scroll
+✅ Cache DOM references and animation state
+✅ Use CSS variables where they improve animation performance
+✅ Keep JavaScript lightweight and avoid unnecessary dependencies
+✅ Do not add external animation libraries
+✅ Optimize images with responsive sizing, lazy loading where appropriate, and modern formats when available
+✅ Prevent cumulative layout shift by reserving image dimensions
+✅ Ensure animations do not block First Contentful Paint or Largest Contentful Paint
+✅ Keep the initial Hero content visible before JavaScript initializes
+✅ Ensure graceful degradation when JavaScript is disabled
+✅ Maintain RTL compatibility using logical CSS properties
+✅ Maintain responsive behavior at 360px / 768px / 1024px / 1440px
+✅ Test performance with Chrome DevTools Performance and Lighthouse
+✅ Verify no horizontal overflow is introduced by the 3D planes
+✅ Verify animation remains smooth on low-end mobile devices
+✅ Minimize DOM complexity inside animated planes
+✅ Do not animate unnecessary elements
+✅ Use `will-change` only on actively animated elements and remove it when animation is inactive
+✅ Keep memory usage low and avoid creating objects or event listeners repeatedly
+✅ Clean up all observers, listeners, and animation loops when no longer needed
+✅ Preserve existing website functionality, SEO, accessibility, and PWA behavior
