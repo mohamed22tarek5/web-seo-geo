@@ -14,7 +14,7 @@ Check whether a website is optimized and ready for AI agents.
 
 Test website performance and loading speed.
 
-🔗 https://veerhost.com/ar/website-speed-test/
+🔗 https://tools.pingdom.com/
 
 ### 3. Compress Image to 100 KB
 
